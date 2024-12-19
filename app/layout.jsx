@@ -1,8 +1,11 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import NavbarWrapper from "@/components/NavbarWrapper";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { CartProvider } from "@/providers/CartProvider";
 import TanstackProvider from "@/providers/TanstackProvider";
+import Footer from "@/components/Footer";
+import ClientBodyWrapper from "@/components/ClientBodyWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,14 +27,23 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <TanstackProvider>
-          <Navbar />
-          {children}
-        </TanstackProvider>
-      </body>
+      <ClientBodyWrapper>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        >
+          <AuthProvider>
+            <CartProvider>
+              <TanstackProvider>
+                <NavbarWrapper />
+                <main className="flex-grow">{children}</main>
+                <div className="mt-16">
+                  <Footer />
+                </div>
+              </TanstackProvider>
+            </CartProvider>
+          </AuthProvider>
+        </body>
+      </ClientBodyWrapper>
     </html>
   );
 }

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import RecipeCard from "./RecipeCard";
 import Modal from "../Modal";
 import SingleRecipe from "./SingleRecipe";
+import Loader from "../ui/Loader";
 
 const RecipesList = () => {
   const [openDetails, setOpenDetails] = useState(false);
@@ -33,8 +34,17 @@ const RecipesList = () => {
     setRecipeId(id);
   };
 
-  if (isLoading) return <div>Loading recipes...</div>;
-  if (error) return <div>Error loading recipes: {error.message}</div>;
+  if (isLoading) return (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <Loader size="large" />
+    </div>
+  );
+
+  if (error) return (
+    <div className="min-h-[400px] flex items-center justify-center text-red-600">
+      Error loading recipes: {error.message}
+    </div>
+  );
 
   return (
     <div className="bg-gray-50 py-10">
@@ -81,7 +91,7 @@ const RecipesList = () => {
             <div className="grid gap-6 md:mx-auto md:w-8/12 lg:w-full lg:grid-cols-3">
               {recipes?.map((recipe) => (
                 <RecipeCard
-                  key={recipe?.id}
+                  key={recipe?.idMeal}
                   recipe={recipe}
                   handleDetailsOpen={handleDetailsOpen}
                 />

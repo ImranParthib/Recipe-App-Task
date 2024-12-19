@@ -1,97 +1,159 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { useAuth } from "@/providers/AuthProvider";
+import { useCart } from "@/providers/CartProvider";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const { cart } = useCart();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false);
+  };
+
   return (
-    <nav className="fixed z-50 w-full bg-white  md:absolute md:bg-transparent">
-      <div className="container m-auto px-2 md:px-12 lg:px-7">
-        <div className="flex flex-wrap items-center justify-between py-3 gap-6 md:py-4 md:gap-0">
-          <input
-            type="checkbox"
-            name="toggle_nav"
-            id="toggle_nav"
-            className="peer hidden"
-          />
-          <div className="w-full px-6 flex justify-between lg:w-max md:px-0 z-30">
+    <nav className="fixed z-50 w-full bg-white/90 backdrop-blur-sm">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <span className="text-2xl font-bold text-yellow-900">
+              Tailus <span className="text-yellow-700">Feedus</span>
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
             <Link
-              href="/"
-              aria-label="logo"
-              className="flex space-x-2 items-center"
+              href="/all-recipes"
+              className="text-gray-700 hover:text-yellow-700 transition-colors"
             >
-              <span className="text-2xl font-bold text-yellow-900 ">
-                Tailus <span className="text-yellow-700 ">Feedus</span>
-              </span>
+              All Recipes
             </Link>
-
-            <div className="flex items-center lg:hidden max-h-10">
-              <label
-                role="button"
-                htmlFor="toggle_nav"
-                aria-label="hamburger"
-                id="hamburger"
-                className="relative w-10 h-auto p-2"
+            {user && (
+              <Link
+                href="/cart"
+                className="text-gray-700 hover:text-yellow-700 transition-colors"
               >
-                <div
-                  id="line"
-                  className="m-auto h-0.5 w-6 rounded bg-yellow-900  transition duration-300"
-                ></div>
-                <div
-                  id="line2"
-                  className="m-auto mt-2 h-0.5 w-6 rounded bg-yellow-900  transition duration-300"
-                ></div>
-              </label>
-            </div>
+                Cart ({cart.length})
+              </Link>
+            )}
           </div>
 
-          <label
-            role="button"
-            htmlFor="toggle_nav"
-            className="hidden peer-checked:block fixed w-full h-full left-0 top-0 z-10 bg-yellow-200  bg-opacity-30 backdrop-blur backdrop-filter"
-          ></label>
-          <div className="hidden peer-checked:flex w-full flex-col lg:flex lg:flex-row justify-end z-30 items-center gap-y-6 p-6 rounded-xl bg-white  lg:gap-y-0 lg:p-0 md:flex-nowrap lg:bg-transparent lg:w-7/12">
-            <div className="text-gray-600 lg:pr-4 w-full">
-              <ul className="tracking-wide font-medium text-sm flex flex-col gap-y-6 lg:gap-y-0 lg:flex-row w-full">
-                <li>
-                  <Link
-                    href="/all-recipes"
-                    className="block md:px-4 transition hover:text-yellow-700"
-                  >
-                    <span>All recipes</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/cart"
-                    className="block md:px-4 transition hover:text-yellow-700"
-                  >
-                    <span>Cart</span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="w-full min-w-max space-y-2 border-yellow-200 lg:space-y-0 sm:w-max lg:border-l ">
-              <button
-                type="button"
-                title="Start buying"
-                className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
-              >
-                <span className="block text-yellow-800 font-semibold text-sm">
-                  Sign up
-                </span>
-              </button>
-              <button
-                type="button"
-                title="Start buying"
-                className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
-              >
-                <span className="block text-yellow-900 font-semibold text-sm">
+          {/* Auth Buttons - Desktop */}
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <>
+                <span className="text-gray-700">Welcome, {user.name}</span>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-sm font-medium text-yellow-900 bg-yellow-100 rounded-full hover:bg-yellow-200 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="text-gray-700 hover:text-yellow-700 transition-colors"
+                >
                   Login
-                </span>
-              </button>
+                </Link>
+                <Link
+                  href="/auth/register"
+                  className="px-4 py-2 text-sm font-medium text-yellow-900 bg-yellow-100 rounded-full hover:bg-yellow-200 transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t">
+            <div className="flex flex-col space-y-4">
+              <Link
+                href="/all-recipes"
+                className="text-gray-700 hover:text-yellow-700 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                All Recipes
+              </Link>
+              {user && (
+                <Link
+                  href="/cart"
+                  className="text-gray-700 hover:text-yellow-700 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Cart ({cart.length})
+                </Link>
+              )}
+              {user ? (
+                <>
+                  <span className="text-gray-700">Welcome, {user.name}</span>
+                  <button
+                    onClick={handleLogout}
+                    className="px-4 py-2 text-sm font-medium text-yellow-900 bg-yellow-100 rounded-full hover:bg-yellow-200 transition-colors w-full text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="text-gray-700 hover:text-yellow-700 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="px-4 py-2 text-sm font-medium text-yellow-900 bg-yellow-100 rounded-full hover:bg-yellow-200 transition-colors text-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );

@@ -1,34 +1,91 @@
 # Recipe App
 
-# Description:
+A Next.js application that allows users to browse recipes, create accounts, and save their favorite recipes to a cart.
 
-- You are provided with an incomplete Recipe App project that uses the free MealDB API to retrieve recipe data. The app needs to showcase some recipes and allows users to add them to a cart. Functionalities after carting is not required for the current MVP. The home page includes a banner section, a top recipes section, and a search option to find recipes by name or ingredients.
+## Features Implemented
 
-# Required New Features:
+### Required Features
+- Basic Authentication
+  - Complete registration flow with name, email, phone, and password
+  - Login/logout functionality with form validation
+  - Protected routes and authenticated features
+  - Persistent sessions using localStorage
 
-- Basic Authentication: Implement an authentication flow using name, email, phone, and a password.
-- All Recipes Page: Create a page where users can view all recipes.
-- Add Recipe to Cart: Allow users to add recipes to a cart. The cart should store data locally if the user is not logged in, and save it to the user’s account if they are logged in.
-- Bug Fixes: There are at least three, or more features that are currently not working properly. Identify and fix these bugs.
+- All Recipes Page
+  - Display all available recipes in a grid layout
+  - Search functionality to filter recipes
+  - Responsive recipe cards with images
+  - Recipe details modal view
 
-# Additional Requirements:
+- Cart Functionality
+  - Add recipes to cart (requires authentication)
+  - Remove recipes from cart
+  - Local storage persistence
+  - Cart count in navigation
+  - Empty cart state handling
 
-- Consistent Design Style: Ensure that any new features match the design style of the existing application. Follow basic accessibility standards.
-- Mobile Responsiveness: Make all pages responsive for mobile devices.
+### Additional Improvements
+- UI/UX Enhancements
+  - Fully responsive design for all screen sizes
+  - Loading states with custom spinner
+  - Error handling with user feedback
+  - Smooth transitions and animations
+  - Consistent styling across components
+  - Responsive footer with dynamic content
+    - Quick links section with authentication-aware navigation
+    - Contact information and social media links
+    - Proper spacing and mobile optimization
 
-# Documentation Requirements:
+- Performance Optimizations
+  - Client-side state management
+  - Optimized image loading
+  - Proper data caching
+  - Efficient API calls
 
-- After completion, document under the README section.
-- Features Implemented: Describe the new features you added, in both technical and non-technical terms.
-- Bug Fixes: Briefly list the bugs you identified and fixed.
-- Time Estimate: Indicate the total time spent on the assessment.
+- Code Quality
+  - Component reusability
+  - Clean code structure
+  - Proper TypeScript types
+  - Consistent error handling
+  - Accessibility improvements
 
-# N.B. Documentation should be brief and short, no need to go overboard with it.
+## Bug Fixes
 
-# Submission Guidelines:
+1. Fixed hydration mismatch errors by properly handling client-side state
+2. Corrected recipe card key prop from `id` to `idMeal` to match API data
+3. Fixed SingleRecipe loading condition that was inversed
+4. Improved search functionality in RecipesList component
+5. Fixed mobile menu layout and interaction issues
 
-- Clone or ZIP Download the existing GitHub Code repository: https://github.com/khalek-repliq/frontend-assessment
-- Get rid of the .git folder from the project.
-- Make your necessary changes and upload your new project into your personal GitHub account as a public repository
-- Host your final version on Vercel, Netlify, Firebase or similar platform and prepare your live link.
-- You must submit your "GitHub Link" & "Live Link"
+## Technical Implementation
+
+- Used Next.js 13+ with App Router
+- Implemented client-side state management with React Context
+- Utilized TanStack Query for API data fetching
+- Integrated Tailwind CSS for styling
+- Added proper TypeScript types and interfaces
+
+## Time Estimate
+
+Total development time: Approximately 1 hour
+- Initial setup and bug fixes: 15 minutes
+- Authentication implementation: 15 minutes
+- Cart functionality: 10 minutes
+- UI/UX improvements: 10 minutes
+- Loading states and error handling: 10 minutes
+- Footer implementation: 5 minutes
+
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to view the application.

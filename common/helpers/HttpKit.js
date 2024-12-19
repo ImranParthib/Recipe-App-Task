@@ -4,51 +4,40 @@ const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
 
 const HttpKit = {
   getTopRecipes: async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/filter.php?a=American`);
-      return response.data.meals ? response.data.meals.slice(0, 12) : [];
-    } catch (error) {
-      console.error("Error fetching top recipes:", error);
-      throw error;
-    }
+    const response = await fetch(
+      "https://www.themealdb.com/api/json/v1/1/search.php?f=a"
+    );
+    const data = await response.json();
+    return data.meals;
   },
 
-  searchRecipesByName: async (query) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/search.php`, {
-        params: { s: query },
-      });
-      return response.data.meals || [];
-    } catch (error) {
-      console.error("Error fetching recipes by name:", error);
-      throw error;
-    }
-  },
-
-  searchRecipesByIngredient: async (ingredient) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/filter.php`, {
-        params: { i: ingredient },
-      });
-      return response.data.meals || [];
-    } catch (error) {
-      console.error("Error fetching recipes by ingredient:", error);
-      throw error;
-    }
+  getAllRecipes: async () => {
+    // For demo purposes, we'll fetch recipes starting with different letters
+    const letters = ['a', 'b', 'c', 'd'];
+    const promises = letters.map(letter =>
+      fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`)
+        .then(res => res.json())
+    );
+    
+    const results = await Promise.all(promises);
+    const meals = results.flatMap(result => result.meals || []);
+    return meals;
   },
 
   getRecipeDetails: async (id) => {
-    try {
-      const response = axios
-        .get(`${BASE_URL}/lookup.php`, {
-          params: { i: id },
-        })
-        .then((res) => res);
-      return response.data.meals ? response.data.meals[0] : null;
-    } catch (error) {
-      console.error("Error fetching recipe details:", error);
-      throw error;
-    }
+    const response = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+    );
+    const data = await response.json();
+    return data.meals[0];
+  },
+
+  searchRecipes: async (query) => {
+    const response = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
+    );
+    const data = await response.json();
+    return data.meals;
   },
 
   getCategories: async () => {
